@@ -85,16 +85,7 @@
         }
 
         .arc-logo-sub {
-            font-family: "Google Sans", "Product Sans", "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-            font-weight: 500;
-            color: #86868b;
-            font-size: 10px;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 1px 5px;
-            border-radius: 4px;
+            display: none !important;
         }
 
         .arc-badge {

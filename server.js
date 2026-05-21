@@ -426,6 +426,19 @@ class ArcServer {
                 // Inject the native mock bridge scripts in the head to prevent browser startup crashes
                 const mockBridges = `
 <title>Antigravity Remote</title>
+<meta name="description" content="Antigravity Remote Control — controlá tu agente de IA desde cualquier dispositivo." />
+<meta name="application-name" content="Antigravity Remote" />
+<meta name="theme-color" content="#161617" />
+<link rel="apple-touch-icon" href="/logo.png" />
+<link rel="icon" type="image/png" href="/logo.png" />
+<meta property="og:title" content="Antigravity Remote" />
+<meta property="og:description" content="Controlá tu agente Antigravity desde cualquier dispositivo." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="/logo.png" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Antigravity Remote" />
+<meta name="twitter:description" content="Controlá tu agente Antigravity desde cualquier dispositivo." />
+<meta name="twitter:image" content="/logo.png" />
 <script>
 window.nativeStorage = {
     getItems: async () => {
