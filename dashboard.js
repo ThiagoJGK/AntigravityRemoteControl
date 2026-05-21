@@ -306,6 +306,81 @@
                 border-radius: 6px;
             }
         }
+
+        /* ── Mobile fix: Antigravity question/decision modal overflow ── */
+        /* Force all message containers and cards to respect the viewport width */
+        @media (max-width: 768px) {
+            /* Global box model fix for all elements inside the app */
+            #root *, #root *::before, #root *::after {
+                box-sizing: border-box !important;
+            }
+
+            /* Prevent any element from overflowing horizontally */
+            #root {
+                max-width: 100vw !important;
+                overflow-x: hidden !important;
+            }
+
+            /* Message bubble / card containers — Tailwind uses these patterns */
+            #root [class*="rounded"][class*="border"],
+            #root [class*="rounded"][class*="bg-"],
+            #root [class*="card"],
+            #root [class*="message"],
+            #root [class*="bubble"] {
+                max-width: 100% !important;
+                width: auto !important;
+                min-width: 0 !important;
+                overflow-wrap: break-word !important;
+                word-break: break-word !important;
+            }
+
+            /* Decision/question modal: question text and options list */
+            /* Target the fixed-bottom panel that contains question + options */
+            #root [class*="fixed"][class*="bottom"],
+            #root [class*="sticky"][class*="bottom"] {
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                box-sizing: border-box !important;
+                padding-left: 12px !important;
+                padding-right: 12px !important;
+            }
+
+            /* The question card itself */
+            #root [class*="flex"][class*="flex-col"] > [class*="rounded"],
+            #root [class*="flex"][class*="gap"] > [class*="rounded"] {
+                max-width: calc(100vw - 24px) !important;
+                overflow-wrap: break-word !important;
+                word-break: break-word !important;
+            }
+
+            /* All text nodes: force wrapping */
+            #root p, #root span, #root div, #root li, #root a {
+                overflow-wrap: break-word !important;
+                word-break: break-word !important;
+                max-width: 100% !important;
+            }
+
+            /* Links inside question text */
+            #root a {
+                word-break: break-all !important;
+            }
+
+            /* Inline flex items that create horizontal overflow */
+            #root [class*="flex-row"],
+            #root [class*="flex"][class*="items-center"] {
+                flex-wrap: wrap !important;
+                max-width: 100% !important;
+            }
+
+            /* Chat/message scroll container */
+            #root [class*="overflow-y-auto"],
+            #root [class*="overflow-y-scroll"] {
+                overflow-x: hidden !important;
+                max-width: 100vw !important;
+            }
+        }
     `;
 
     // Inject styles
