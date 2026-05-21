@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+<title>Antigravity</title>
+<script>window.__APP_CONFIG__ = {"productName":"antigravity","csrfToken":"ebd60e05-fc66-420c-96f5-c950523b9ce6","appVersion":"2.0.1","devMode":false};</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Preconnect secondary CDNs for dynamic UI icons (Drive, Docs, Colab) -->
+    <link rel="preconnect" href="https://www.gstatic.com" />
+    <link rel="preconnect" href="https://ssl.gstatic.com" />
+    <!-- Preconnect to font origins for dynamic Google Symbols loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>
+      // Workaround for mce-autosize-textarea re-definition error from overlay_bundle.js.
+      if (window.customElements) {
+        const originalDefine = window.customElements.define;
+        window.customElements.define = (name, constructor, options) => {
+          if (!window.customElements.get(name)) {
+            originalDefine.call(window.customElements, name, constructor, options);
+          }
+        };
+      }
+    </script>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎁</text></svg>"
+    />
+    <script src="/tailwindcss.min.js"></script>
+    <script src="/tailwind-config.js"></script>
+    <link rel="stylesheet" href="/jetbox.css" />
+    <!-- Inline styles to prevent flash before app loads -->
+    <style>
+      html,
+      body {
+        height: 100%;
+        background-color: #0e1318; /* Default dark */
+      }
+      @media (prefers-color-scheme: light) {
+        html,
+        body {
+          background-color: #eee; /* Light */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="/main.js"></script>
+  </body>
+</html>
