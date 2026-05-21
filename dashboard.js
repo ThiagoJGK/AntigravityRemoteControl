@@ -307,21 +307,59 @@
             }
         }
 
-        /* ── Mobile fix: Antigravity question/decision modal overflow ── */
-        /* Force all message containers and cards to respect the viewport width */
+        /* ── Mobile fix: bottom boundary + horizontal overflow ── */
         @media (max-width: 768px) {
-            /* Global box model fix for all elements inside the app */
+            /* Global box model fix */
             #root *, #root *::before, #root *::after {
                 box-sizing: border-box !important;
             }
 
-            /* Prevent any element from overflowing horizontally */
+            /* Prevent horizontal overflow */
             #root {
                 max-width: 100vw !important;
                 overflow-x: hidden !important;
             }
 
-            /* Message bubble / card containers — Tailwind uses these patterns */
+            /* ── BOTTOM BOUNDARY FIX ──
+               The "Ask anything" input bar is fixed at the bottom (~80px).
+               The ARC bar adds 38px at the top.
+               We add padding-bottom to every scrollable container so the
+               last message is never hidden behind the input bar.
+               env(safe-area-inset-bottom) handles notched phones (iPhone etc). */
+            #root [class*="overflow-y-auto"],
+            #root [class*="overflow-y-scroll"] {
+                overflow-x: hidden !important;
+                max-width: 100vw !important;
+                padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+                scroll-padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+            }
+
+            /* The main layout wrapper — ensure it never exceeds available height
+               (viewport minus ARC bar 38px on mobile) */
+            #root > div,
+            #root [class*="h-full"],
+            #root [class*="h-screen"],
+            #root [class*="min-h-full"],
+            #root [class*="min-h-screen"] {
+                max-height: calc(100vh - 38px) !important;
+                overflow-y: auto !important;
+            }
+
+            /* Bottom fixed bars (input bar, decision panel) —
+               ensure they sit above the browser navigation chrome */
+            #root [class*="fixed"][class*="bottom"],
+            #root [class*="sticky"][class*="bottom"] {
+                left: 0 !important;
+                right: 0 !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+                box-sizing: border-box !important;
+                padding-left: 12px !important;
+                padding-right: 12px !important;
+                padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+            }
+
+            /* Message bubble / card containers */
             #root [class*="rounded"][class*="border"],
             #root [class*="rounded"][class*="bg-"],
             #root [class*="card"],
@@ -334,20 +372,7 @@
                 word-break: break-word !important;
             }
 
-            /* Decision/question modal: question text and options list */
-            /* Target the fixed-bottom panel that contains question + options */
-            #root [class*="fixed"][class*="bottom"],
-            #root [class*="sticky"][class*="bottom"] {
-                left: 0 !important;
-                right: 0 !important;
-                width: 100% !important;
-                max-width: 100vw !important;
-                box-sizing: border-box !important;
-                padding-left: 12px !important;
-                padding-right: 12px !important;
-            }
-
-            /* The question card itself */
+            /* Question/decision card */
             #root [class*="flex"][class*="flex-col"] > [class*="rounded"],
             #root [class*="flex"][class*="gap"] > [class*="rounded"] {
                 max-width: calc(100vw - 24px) !important;
@@ -355,30 +380,23 @@
                 word-break: break-word !important;
             }
 
-            /* All text nodes: force wrapping */
+            /* Force text wrapping everywhere */
             #root p, #root span, #root div, #root li, #root a {
                 overflow-wrap: break-word !important;
                 word-break: break-word !important;
                 max-width: 100% !important;
             }
 
-            /* Links inside question text */
+            /* URLs break at any character */
             #root a {
                 word-break: break-all !important;
             }
 
-            /* Inline flex items that create horizontal overflow */
+            /* Inline flex rows → wrap instead of overflow */
             #root [class*="flex-row"],
             #root [class*="flex"][class*="items-center"] {
                 flex-wrap: wrap !important;
                 max-width: 100% !important;
-            }
-
-            /* Chat/message scroll container */
-            #root [class*="overflow-y-auto"],
-            #root [class*="overflow-y-scroll"] {
-                overflow-x: hidden !important;
-                max-width: 100vw !important;
             }
         }
     `;
