@@ -199,12 +199,16 @@
         }
 
         /* Shift original app root down to make space for our gorgeous bar */
-        html, body {
+        html {
             height: 100% !important;
-            overflow: hidden !important; /* Prevents any scrolling of the main window layout */
+            /* overscroll-behavior prevents page bounce/rubber-band WITHOUT
+               blocking internal touch scroll — replaces overflow:hidden */
+            overscroll-behavior: none !important;
         }
 
         body {
+            height: 100% !important;
+            overscroll-behavior: none !important;
             padding-top: 0px !important;
             box-sizing: border-box !important;
         }
@@ -307,46 +311,35 @@
             }
         }
 
-        /* ── Mobile fix: bottom boundary + horizontal overflow ── */
+        /* ── Mobile fixes ── */
         @media (max-width: 768px) {
-            /* Global box model fix */
+            /* Global box model */
             #root *, #root *::before, #root *::after {
                 box-sizing: border-box !important;
             }
 
-            /* Prevent horizontal overflow */
+            /* Prevent horizontal overflow without blocking vertical scroll */
             #root {
                 max-width: 100vw !important;
                 overflow-x: hidden !important;
             }
 
-            /* ── BOTTOM BOUNDARY FIX ──
-               The "Ask anything" input bar is fixed at the bottom (~80px).
-               The ARC bar adds 38px at the top.
-               We add padding-bottom to every scrollable container so the
-               last message is never hidden behind the input bar.
-               env(safe-area-inset-bottom) handles notched phones (iPhone etc). */
+            /* ── CHAT SCROLL: unlock touch scrolling ──
+               -webkit-overflow-scrolling:touch enables smooth momentum scroll on iOS.
+               overflow-y must be auto/scroll (NOT hidden) for touch scroll to work.
+               padding-bottom pushes last message above the "Ask anything" bar (~80px). */
             #root [class*="overflow-y-auto"],
             #root [class*="overflow-y-scroll"] {
+                overflow-y: auto !important;          /* must NOT be hidden */
                 overflow-x: hidden !important;
+                -webkit-overflow-scrolling: touch !important;  /* iOS momentum scroll */
+                touch-action: pan-y !important;       /* allow vertical touch drag */
                 max-width: 100vw !important;
                 padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
                 scroll-padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
             }
 
-            /* The main layout wrapper — ensure it never exceeds available height
-               (viewport minus ARC bar 38px on mobile) */
-            #root > div,
-            #root [class*="h-full"],
-            #root [class*="h-screen"],
-            #root [class*="min-h-full"],
-            #root [class*="min-h-screen"] {
-                max-height: calc(100vh - 38px) !important;
-                overflow-y: auto !important;
-            }
-
-            /* Bottom fixed bars (input bar, decision panel) —
-               ensure they sit above the browser navigation chrome */
+            /* ── BOTTOM FIXED BARS (input + decision panel) ── */
             #root [class*="fixed"][class*="bottom"],
             #root [class*="sticky"][class*="bottom"] {
                 left: 0 !important;
@@ -359,7 +352,7 @@
                 padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)) !important;
             }
 
-            /* Message bubble / card containers */
+            /* ── HORIZONTAL OVERFLOW: message cards ── */
             #root [class*="rounded"][class*="border"],
             #root [class*="rounded"][class*="bg-"],
             #root [class*="card"],
@@ -380,7 +373,7 @@
                 word-break: break-word !important;
             }
 
-            /* Force text wrapping everywhere */
+            /* Force text wrapping */
             #root p, #root span, #root div, #root li, #root a {
                 overflow-wrap: break-word !important;
                 word-break: break-word !important;
@@ -392,7 +385,7 @@
                 word-break: break-all !important;
             }
 
-            /* Inline flex rows → wrap instead of overflow */
+            /* Flex rows → wrap instead of overflow */
             #root [class*="flex-row"],
             #root [class*="flex"][class*="items-center"] {
                 flex-wrap: wrap !important;
